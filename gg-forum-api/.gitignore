@@ -1,0 +1,8 @@
+.env
+.env.test
+.idea
+config/database/test.json
+coverage
+forum-api-webserver.pem
+node_modules
+package-lock.json
