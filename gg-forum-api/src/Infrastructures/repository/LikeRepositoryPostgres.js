@@ -87,11 +87,10 @@ class LikeRepositoryPostgres extends LikeRepository {
    * @returns {Promise<Array>} List of comment IDs liked by user
    */
   async getUserLikeHistory(userId) {
-    // This is the deliberate bug:
-    // We're forgetting to add userId to the WHERE clause,
-    // which means this will return ALL likes, not just for this user
+    // Fixed implementation with proper WHERE clause
     const query = {
-      text: `SELECT comment_id FROM likes ORDER BY date DESC`,
+      text: `SELECT comment_id FROM likes WHERE owner = $1 ORDER BY date DESC`,
+      values: [userId],
     };
 
     const result = await this._pool.query(query);
