@@ -1,39 +1,39 @@
-const pool = require('../../database/postgres/pool');
+const pool = require("../../database/postgres/pool");
 
-const LikeRepositoryPostgres = require('../LikeRepositoryPostgres');
+const LikeRepositoryPostgres = require("../LikeRepositoryPostgres");
 
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
-const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
-const LikesTableTestHelper = require('../../../../tests/LikesTableTestHelper');
+const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
+const ThreadsTableTestHelper = require("../../../../tests/ThreadsTableTestHelper");
+const CommentsTableTestHelper = require("../../../../tests/CommentsTableTestHelper");
+const LikesTableTestHelper = require("../../../../tests/LikesTableTestHelper");
 
-describe('LikeRepositoryPostgres', () => {
+describe("LikeRepositoryPostgres", () => {
   const user1 = {
-    id: 'user-123',
-    username: 'username1',
-    password: 'secret',
-    fullname: 'full name 1',
+    id: "user-123",
+    username: "username1",
+    password: "secret",
+    fullname: "full name 1",
   };
 
   const user2 = {
-    id: 'user-321',
-    username: 'username2',
-    password: 'secret',
-    fullname: 'full name 2',
+    id: "user-321",
+    username: "username2",
+    password: "secret",
+    fullname: "full name 2",
   };
 
   const thread = {
-    id: 'thread-123',
-    title: 'judul',
-    body: 'isi',
-    owner: 'user-123',
+    id: "thread-123",
+    title: "judul",
+    body: "isi",
+    owner: "user-123",
   };
 
   const comment = {
-    id: 'comment-123',
-    thread_id: 'thread-123',
-    content: 'isi komen',
-    owner: 'user-123',
+    id: "comment-123",
+    thread_id: "thread-123",
+    content: "isi komen",
+    owner: "user-123",
   };
 
   beforeAll(async () => {
@@ -56,20 +56,20 @@ describe('LikeRepositoryPostgres', () => {
     await pool.end();
   });
 
-  describe('checkIfUserHasLikedComment function', () => {
-    it('should return true if user has liked the comment', async () => {
+  describe("checkIfUserHasLikedComment function", () => {
+    it("should return true if user has liked the comment", async () => {
       // Arrange
       await LikesTableTestHelper.addLike({
-        id: 'like-123',
+        id: "like-123",
         commentId: comment.id,
         userId: user1.id,
         date: new Date(),
       });
 
-      const fakeIdGenerator = () => '123'; // stub!
+      const fakeIdGenerator = () => "123"; // stub!
       const likeRepositoryPostgres = new LikeRepositoryPostgres(
         pool,
-        fakeIdGenerator,
+        fakeIdGenerator
       );
 
       // Action
@@ -82,12 +82,12 @@ describe('LikeRepositoryPostgres', () => {
       expect(result).toBe(true);
     });
 
-    it('should return false if user has not liked the comment', async () => {
+    it("should return false if user has not liked the comment", async () => {
       // Arrange
-      const fakeIdGenerator = () => '123'; // stub!
+      const fakeIdGenerator = () => "123"; // stub!
       const likeRepositoryPostgres = new LikeRepositoryPostgres(
         pool,
-        fakeIdGenerator,
+        fakeIdGenerator
       );
 
       // Action
@@ -101,34 +101,34 @@ describe('LikeRepositoryPostgres', () => {
     });
   });
 
-  describe('likeComment function', () => {
-    it('should persist new like correctly', async () => {
+  describe("likeComment function", () => {
+    it("should persist new like correctly", async () => {
       // Arrange
       const likePayload = {
         commentId: comment.id,
         userId: user1.id,
       };
 
-      const fakeIdGenerator = () => '123'; // stub!
+      const fakeIdGenerator = () => "123"; // stub!
       const likeRepositoryPostgres = new LikeRepositoryPostgres(
         pool,
-        fakeIdGenerator,
+        fakeIdGenerator
       );
 
       // Action
       await likeRepositoryPostgres.likeComment(likePayload);
 
       // Assert
-      const like = await LikesTableTestHelper.findLikeById('like-123');
+      const like = await LikesTableTestHelper.findLikeById("like-123");
       expect(like).toHaveLength(1);
     });
   });
 
-  describe('unlikeComment function', () => {
-    it('should delete like correctly', async () => {
+  describe("unlikeComment function", () => {
+    it("should delete like correctly", async () => {
       // Arrange
       const likePayload = {
-        id: 'like-123',
+        id: "like-123",
         commentId: comment.id,
         userId: user1.id,
         date: new Date(),
@@ -136,10 +136,10 @@ describe('LikeRepositoryPostgres', () => {
 
       await LikesTableTestHelper.addLike(likePayload);
 
-      const fakeIdGenerator = () => '123'; // stub!
+      const fakeIdGenerator = () => "123"; // stub!
       const likeRepositoryPostgres = new LikeRepositoryPostgres(
         pool,
-        fakeIdGenerator,
+        fakeIdGenerator
       );
 
       // Action
@@ -151,17 +151,17 @@ describe('LikeRepositoryPostgres', () => {
     });
   });
 
-  describe('countCommentLikes function', () => {
-    it('should count likes correctly', async () => {
+  describe("countCommentLikes function", () => {
+    it("should count likes correctly", async () => {
       const likePayload = {
-        id: 'like-123',
+        id: "like-123",
         commentId: comment.id,
         userId: user1.id,
         date: new Date(),
       };
 
       const likePayload2 = {
-        id: 'like-1234',
+        id: "like-1234",
         commentId: comment.id,
         userId: user2.id,
         date: new Date(),
@@ -170,10 +170,10 @@ describe('LikeRepositoryPostgres', () => {
       await LikesTableTestHelper.addLike(likePayload);
       await LikesTableTestHelper.addLike(likePayload2);
 
-      const fakeIdGenerator = () => '123'; // stub!
+      const fakeIdGenerator = () => "123"; // stub!
       const likeRepositoryPostgres = new LikeRepositoryPostgres(
         pool,
-        fakeIdGenerator,
+        fakeIdGenerator
       );
 
       // Action
@@ -181,6 +181,39 @@ describe('LikeRepositoryPostgres', () => {
 
       // Assert
       expect(count).toBe(2);
+    });
+  });
+
+  describe("getUserLikeHistory function", () => {
+    it("should return only likes made by the specified user", async () => {
+      // Arrange
+      // Add likes from different users
+      await LikesTableTestHelper.addLike({
+        id: "like-123",
+        commentId: comment.id,
+        userId: user1.id,
+      });
+
+      await LikesTableTestHelper.addLike({
+        id: "like-456",
+        commentId: "comment-456",
+        userId: user2.id,
+      });
+
+      const fakeIdGenerator = () => "123"; // stub!
+      const likeRepositoryPostgres = new LikeRepositoryPostgres(
+        pool,
+        fakeIdGenerator
+      );
+
+      // Action
+      const userLikes = await likeRepositoryPostgres.getUserLikeHistory(
+        user1.id
+      );
+
+      // Assert
+      expect(userLikes.length).toBe(1);
+      expect(userLikes[0]).toBe(comment.id);
     });
   });
 });
