@@ -194,6 +194,14 @@ describe("LikeRepositoryPostgres", () => {
         userId: user1.id,
       });
 
+      // Add the comment before liking it
+      await CommentsTableTestHelper.addComment({
+        id: "comment-456",
+        thread_id: thread.id,
+        content: "dummy content",
+        owner: user2.id,
+      });
+
       await LikesTableTestHelper.addLike({
         id: "like-456",
         commentId: "comment-456",
