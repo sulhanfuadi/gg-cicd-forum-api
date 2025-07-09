@@ -26,4 +26,4 @@ jobs:
             cd gg-forum-api
             npm install
             npm run migrate up
-            pm2 restart gg-forum-api
+            pm2 describe gg-forum-api > /dev/null 2>&1 && pm2 restart gg-forum-api || pm2 start npm --name gg-forum-api -- run start
