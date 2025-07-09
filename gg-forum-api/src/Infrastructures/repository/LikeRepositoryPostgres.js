@@ -80,6 +80,22 @@ class LikeRepositoryPostgres extends LikeRepository {
 
     return parseInt(result.rows[0].count, 10);
   }
+
+  /**
+   * Get user like history
+   * @param {string} userId - User ID
+   * @returns {Promise<Array>} List of comment IDs liked by user
+   */
+  async getUserLikeHistory(userId) {
+    // Fixed implementation with proper WHERE clause
+    const query = {
+      text: `SELECT comment_id FROM likes WHERE owner = $1 ORDER BY date DESC`,
+      values: [userId],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rows.map((row) => row.comment_id);
+  }
 }
 
 module.exports = LikeRepositoryPostgres;

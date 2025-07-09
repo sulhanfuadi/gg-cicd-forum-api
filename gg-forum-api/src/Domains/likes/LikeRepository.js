@@ -40,6 +40,15 @@ class LikeRepository {
   async countCommentLikes(commentId) {
     throw new Error("Like_REPOSITORY.METHOD_NOT_IMPLEMENTED");
   }
+
+  /**
+   * Retrieves the like history of a user.
+   * @param {string} userId - The ID of the user whose like history is to be retrieved.
+   * @returns {Promise<Array>} A promise that resolves to an array of likes made by the user.
+   */
+  async getUserLikeHistory(userId) {
+    throw new Error("Like_REPOSITORY.METHOD_NOT_IMPLEMENTED");
+  }
 }
 
 module.exports = LikeRepository;
