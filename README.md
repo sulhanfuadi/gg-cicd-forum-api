@@ -321,16 +321,16 @@ npm run test:watch
 
 1. Download the [Forum API V2 Test Collection](https://github.com/dicodingacademy/a276-backend-expert-labs/raw/099-shared-content/shared-content/03-submission-content/02-Forum-API-V2/Forum%20API%20V2%20Test.zip)
 2. Import both the collection and environment files into Postman
-3. Set the base URL in the environment to `https://major-windows-remain-noisily.a276.dcdg.xyz`
+3. Set the base URL in the environment to `https://major-windows-remain-noisily.a276.dcdg.xyz` (no longer resolves)
 4. Run the collection tests in sequence using the Collection Runner
 
 ## Deployment
 
-The application is deployed at: [https://major-windows-remain-noisily.a276.dcdg.xyz](https://major-windows-remain-noisily.a276.dcdg.xyz)
+**Note: This service is no longer active.** The application was previously deployed at: [https://major-windows-remain-noisily.a276.dcdg.xyz](https://major-windows-remain-noisily.a276.dcdg.xyz) but has been shut down to avoid AWS costs.
 
-- **Server**: AWS EC2 instance
-- **IP Address**: 13.250.116.37
-- **Domain**: major-windows-remain-noisily.a276.dcdg.xyz
+- **Server**: AWS EC2 instance (deactivated)
+- **IP Address**: 13.250.116.37 (no longer accessible)
+- **Domain**: major-windows-remain-noisily.a276.dcdg.xyz (no longer resolves)
 
 ## Development Best Practices
 
