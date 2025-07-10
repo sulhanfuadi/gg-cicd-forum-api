@@ -1,9 +1,5 @@
 # GG Forum API - CI/CD & Security Implementation
 
-<!--
-![CI Status](https://github.com/sulhanfuadi/gg-forum-api/workflows/Continuous%20Integration/badge.svg)
-![CD Status](https://github.com/sulhanfuadi/gg-forum-api/workflows/Continuous%20Deployment/badge.svg) -->
-
 ## Overview
 
 This project implements a secure forum API with CI/CD implementation as part of the **Menjadi Back-End Developer Expert dengan JavaScript** course on Dicoding's Back-End Developer learning path. This is the second submission that focuses on implementing CI/CD practices and security features to the existing Forum API.
@@ -32,36 +28,83 @@ This project implements a secure forum API with CI/CD implementation as part of 
 - **Database**: PostgreSQL
 - **Testing**: Jest
 - **CI/CD**: GitHub Actions
-- **Web Server**: NGINX (for rate limiting)
+- **Web Server**: NGINX (for rate limiting and SSL)
+- **SSL Certificate**: Let's Encrypt
 - **Architecture**: Clean Architecture
 
 ## Project Structure
 
-This project follows Clean Architecture principles:
+This project follows Clean Architecture principles with a clear separation of concerns:
 
 ```
-gg-forum-api/
-├── .github/workflows/        # CI/CD workflow configurations
-├── nginx/                    # NGINX configuration files
-├── src/
-│   ├── Applications/         # Application business rules
-│   │   ├── security/         # Security implementations
-│   │   ├── use_case/         # Use cases for business logic
-│   │   └── ...
-│   ├── Commons/              # Shared utilities
-│   ├── Domains/              # Enterprise business rules
-│   ├── Infrastructures/      # Frameworks and tools
-│   │   ├── http/             # API implementations
-│   │   ├── repository/       # Database implementations
-│   │   ├── security/         # Security implementations
-│   │   └── ...
-│   ├── Interfaces/           # Interface adapters
-│   └── app.js               # Application entry point
-├── tests/                   # Test files
-├── .env.example             # Example environment variables
-├── package.json             # Project dependencies
-└── README.md                # Project documentation
+gg-cicd-forum-api/
+├── gg-forum-api/                 # Main application code
+│   ├── src/
+│   │   ├── Applications/         # Application business rules
+│   │   │   ├── security/         # Security interfaces
+│   │   │   │   ├── AuthenticationTokenManager.js
+│   │   │   │   └── PasswordHash.js
+│   │   │   └── use_case/        # Business logic use cases
+│   │   │       ├── AddCommentUseCase.js
+│   │   │       ├── AddReplyUseCase.js
+│   │   │       ├── AddThreadUseCase.js
+│   │   │       ├── AddUserUseCase.js
+│   │   │       ├── DeleteCommentUseCase.js
+│   │   │       ├── DeleteReplyUseCase.js
+│   │   │       ├── GetThreadUseCase.js
+│   │   │       ├── LikeUnlikeUseCase.js
+│   │   │       ├── LoginUserUseCase.js
+│   │   │       ├── LogoutUserUseCase.js
+│   │   │       └── RefreshAuthenticationUseCase.js
+│   │   ├── Commons/              # Shared utilities
+│   │   │   ├── exceptions/       # Custom error types
+│   │   │   └── ...
+│   │   ├── Domains/              # Enterprise business rules
+│   │   │   ├── authentications/  # Authentication domain
+│   │   │   ├── comments/         # Comments domain
+│   │   │   ├── likes/            # Likes domain
+│   │   │   ├── replies/          # Replies domain
+│   │   │   ├── threads/          # Threads domain
+│   │   │   └── users/            # Users domain
+│   │   └── Infrastructures/      # External frameworks & tools
+│   │       ├── database/         # Database connections
+│   │       ├── http/             # HTTP server implementation
+│   │       │   ├── _test/        # API endpoint tests
+│   │       │   └── createServer.js
+│   │       ├── repository/       # Repository implementations
+│   │       │   ├── AuthenticationRepositoryPostgres.js
+│   │       │   ├── CommentRepositoryPostgres.js
+│   │       │   ├── LikeRepositoryPostgres.js
+│   │       │   ├── ReplyRepositoryPostgres.js
+│   │       │   ├── ThreadRepositoryPostgres.js
+│   │       │   └── UserRepositoryPostgres.js
+│   │       ├── security/         # Security implementations
+│   │       │   ├── BcryptPasswordHash.js
+│   │       │   └── JwtTokenManager.js
+│   │       └── container.js      # Dependency injection container
+│   ├── tests/                    # Test helpers
+│   │   ├── AuthenticationsTableTestHelper.js
+│   │   ├── CommentsTableTestHelper.js
+│   │   ├── EndpointTestHelper.js
+│   │   ├── LikesTableTestHelper.js
+│   │   ├── RepliesTableTestHelper.js
+│   │   ├── ThreadsTableTestHelper.js
+│   │   └── UsersTableTestHelper.js
+│   └── .env.example              # Environment variables template
+├── .github/workflows/            # CI/CD workflow configurations
+├── nginx/                        # NGINX configuration files
+└── README.md                     # Project documentation
 ```
+
+This structure adheres to Clean Architecture principles by:
+
+1. **Separation of Concerns**: Each layer has a specific responsibility
+2. **Dependency Rule**: Dependencies point inward (domain ← application ← infrastructure)
+3. **Entities at the Core**: Domain entities are independent of external frameworks
+4. **Use Cases**: Business logic isolated in use case classes
+5. **Adapters**: Infrastructure layer adapts external frameworks to the application
+
+The organization ensures testability, maintainability, and makes the system easier to evolve as requirements change.
 
 ## CI/CD Implementation
 
@@ -106,8 +149,7 @@ To protect against DDoS attacks, rate limiting has been implemented:
 
 All API endpoints are only accessible via HTTPS:
 
-<!-- - **Domain**: [https://forum-api.sulhanfuadi.com](https://forum-api.sulhanfuadi.com) -->
-
+- **Domain**: [https://major-windows-remain-noisily.a276.dcdg.xyz](https://major-windows-remain-noisily.a276.dcdg.xyz)
 - **SSL Certificate**: Let's Encrypt
 - **Implementation**: NGINX with SSL configuration
 
@@ -124,7 +166,7 @@ All API endpoints are only accessible via HTTPS:
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/sulhanfuadi/gg-forum-api.git
+   git clone https://github.com/sulhanfuadi/gg-cicd-forum-api.git
    cd gg-forum-api
    ```
 
@@ -279,12 +321,16 @@ npm run test:watch
 
 1. Download the [Forum API V2 Test Collection](https://github.com/dicodingacademy/a276-backend-expert-labs/raw/099-shared-content/shared-content/03-submission-content/02-Forum-API-V2/Forum%20API%20V2%20Test.zip)
 2. Import both the collection and environment files into Postman
-3. Set the base URL in the environment to your API URL
+3. Set the base URL in the environment to `https://major-windows-remain-noisily.a276.dcdg.xyz`
 4. Run the collection tests in sequence using the Collection Runner
 
 ## Deployment
 
-The application is deployed at: [https://forum-api.sulhanfuadi.com](https://forum-api.sulhanfuadi.com)
+The application is deployed at: [https://major-windows-remain-noisily.a276.dcdg.xyz](https://major-windows-remain-noisily.a276.dcdg.xyz)
+
+- **Server**: AWS EC2 instance
+- **IP Address**: 13.250.116.37
+- **Domain**: major-windows-remain-noisily.a276.dcdg.xyz
 
 ## Development Best Practices
 
