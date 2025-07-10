@@ -1,6 +1,7 @@
 .env
 .env.test
-.idea
+.test.env
+*.env
 config/database/test.json
 coverage
 forum-api-webserver.pem
