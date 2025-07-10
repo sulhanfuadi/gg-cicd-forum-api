@@ -149,7 +149,7 @@ To protect against DDoS attacks, rate limiting has been implemented:
 
 All API endpoints are only accessible via HTTPS:
 
-- **Domain**: [https://major-windows-remain-noisily.a276.dcdg.xyz](https://major-windows-remain-noisily.a276.dcdg.xyz)
+- **Domain**: [https://major-windows-remain-noisily.a276.dcdg.xyz](https://major-windows-remain-noisily.a276.dcdg.xyz) (no longer resolves)
 - **SSL Certificate**: Let's Encrypt
 - **Implementation**: NGINX with SSL configuration
 
