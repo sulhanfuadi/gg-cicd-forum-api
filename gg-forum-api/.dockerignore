@@ -1,5 +1,0 @@
-.vscode/
-*.log
-*_test/
-node_modules/
-tests
